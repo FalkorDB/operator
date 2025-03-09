@@ -1,13 +1,8 @@
 name: Build Docker Image for testing
 on:
   push:
-    branches:
-      - main
     tags:
       - "v*"
-  pull_request:
-    branches:
-      - main
 
 env:
   REPOSITORY: falkordb/operator
@@ -34,4 +29,5 @@ jobs:
           platforms: linux/arm64,linux/amd64
           push: true
           tags: |
+            ${{ env.REPOSITORY }}:${{ github.ref }}
             ${{ env.REPOSITORY }}:latest
