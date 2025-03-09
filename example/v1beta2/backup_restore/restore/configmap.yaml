@@ -1,8 +1,0 @@
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: redis-external-config
-data:
-  redis-additional.conf: |
-    appendonly no
