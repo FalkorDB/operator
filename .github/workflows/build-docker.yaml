@@ -26,10 +26,7 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Print ref name
-        run: echo ${{ github.ref }}
-        
+              
       - name: Build multi-arch image
         uses: docker/build-push-action@v6
         with:
@@ -37,5 +34,4 @@ jobs:
           platforms: linux/arm64,linux/amd64
           push: true
           tags: |
-            ${{ env.REPOSITORY }}:${{ github.ref}}
             ${{ env.REPOSITORY }}:latest
