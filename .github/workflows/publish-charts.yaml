@@ -95,7 +95,7 @@ jobs:
 
       - name: Get chart version
         run: |
-          echo "chart_version=$(echo v1.1.1)" >> $GITHUB_ENV
+          echo "chart_version=$(echo ${GITHUB_REF##*/v})" >> $GITHUB_ENV
 
       - name: Install Helm
         uses: azure/setup-helm@v4
