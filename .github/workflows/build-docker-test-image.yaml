@@ -1,8 +1,12 @@
-name: Build Docker Image for Operator
+name: Build Docker Image for Operator testing
 on:
-  push:
-    tags:
-      - "v*"
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag for the image'
+        required: true
 
 env:
   REPOSITORY: falkordb/operator
@@ -29,5 +33,5 @@ jobs:
           platforms: linux/arm64,linux/amd64
           push: true
           tags: |
-            ${{ env.REPOSITORY }}:${{ github.ref }}
+            ${{ env.REPOSITORY }}:${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
             ${{ env.REPOSITORY }}:latest
