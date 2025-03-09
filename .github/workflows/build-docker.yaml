@@ -1,4 +1,4 @@
-name: Build Docker Image for testing
+name: Build Docker Image for Operator
 on:
   push:
     tags:
