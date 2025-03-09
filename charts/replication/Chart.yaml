@@ -6,12 +6,10 @@ appVersion: "0.16.7"
 type: application
 engine: gotpl
 maintainers:
-  - name: iamabhishek-dubey
-  - name: sandy724
-  - name: shubham-cmyk
+  - name: muhammadqadora
 sources:
-  - https://github.com/ot-container-kit/redis-operator
-home: https://github.com/ot-container-kit/redis-operator
+  - https://github.com/falkordb/operator
+home: https://github.com/falkordb/operator
 keywords:
 - operator
 - redis
@@ -19,4 +17,3 @@ keywords:
 - kubernetes
 - openshift
 - redis-exporter
-icon: https://github.com/OT-CONTAINER-KIT/redis-operator/raw/master/static/redis-operator-logo.svg

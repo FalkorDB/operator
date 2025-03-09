@@ -3,13 +3,11 @@ name: redis-cluster
 description: Provides easy redis setup definitions for Kubernetes services, and deployment.
 version: 0.16.5
 appVersion: "0.16.5"
-home: https://github.com/ot-container-kit/redis-operator
+home: https://github.com/falkordb/operator
 sources:
-  - https://github.com/ot-container-kit/redis-operator
+  - https://github.com/falkordb/redis-operator
 maintainers:
-  - name: iamabhishek-dubey
-  - name: sandy724
-  - name: shubham-cmyk
+  - name: muhammadqadora
 keywords:
 - operator
 - redis
@@ -17,5 +15,4 @@ keywords:
 - kubernetes
 - openshift
 - redis-exporter
-icon: https://github.com/OT-CONTAINER-KIT/redis-operator/raw/master/static/redis-operator-logo.svg
 type: application

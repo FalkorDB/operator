@@ -6,7 +6,8 @@ on:
       - 'charts/**'
       - '.github/workflows/publish-charts.yaml'
     branches:
-      - master
+      - main
+      
 
 jobs:
   lint-charts:
@@ -59,7 +60,7 @@ jobs:
       - name: Install and test Redis Related Helm charts
         run: |
           kubectl cluster-info --context kind-kind
-          chart_dirs=("redis-operator" "redis" "redis-cluster" "redis-replication" "redis-sentinel")
+          chart_dirs=("operator" "standalone" "cluster" "replication" "sentinel")
           for dir in "${chart_dirs[@]}"
           do
             if [[ -f ./charts/$dir/Chart.yaml ]]; then
@@ -80,8 +81,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: "${{ github.repository_owner }}/redis-operator"
-          path: "redis-operator"
+          repository: "${{ github.repository_owner }}/operator"
+          path: "operator"
           fetch-depth: 0
 
       - name: Checkout helm-charts
@@ -102,37 +103,18 @@ jobs:
 
       - name: Make charts
         shell: bash
-        working-directory: redis-operator
+        working-directory: operator
         run: |
           helm repo add jetstack https://charts.jetstack.io
           helm repo update
 
-          chart_dirs=("redis-operator" "redis" "redis-cluster" "redis-replication" "redis-sentinel")
+          chart_dirs=("operator" "standalone" "cluster" "replication" "sentinel")
           for dir in "${chart_dirs[@]}"
           do
             if [[ -f ./charts/$dir/Chart.yaml ]]; then
               helm dependency update ./charts/$dir/
             fi
             helm package charts/$dir -d .cr-release-packages
-          done
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3.3.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish to OCI registry (ghcr.io)
-        shell: bash
-        working-directory: redis-operator
-        run: |
-          shopt -s nullglob
-          for pkg in .cr-release-packages/*; do
-            if [ -z "${pkg:-}" ]; then
-              break
-            fi
-            helm push "${pkg}" "oci://ghcr.io/ot-container-kit/charts"
           done
 
       - name: Install chart-releaser
@@ -143,7 +125,7 @@ jobs:
       # upload charts to helm-charts repos's release
       - name: Upload charts
         shell: bash
-        working-directory: redis-operator
+        working-directory: operator
         run: |
           cr upload
         env:
@@ -161,7 +143,7 @@ jobs:
       # copy artifacts to helm-charts repo, we need those for update index
       - name: Copy artifacts
         run: |
-          cp -r redis-operator/.cr-release-packages helm-charts/
+          cp -r operator/.cr-release-packages helm-charts/
 
       - name: Configure Git
         working-directory: helm-charts
