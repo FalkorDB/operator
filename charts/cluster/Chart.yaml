@@ -1,11 +1,11 @@
 apiVersion: v2
-name: redis-cluster
+name: cluster
 description: Provides easy redis setup definitions for Kubernetes services, and deployment.
 version: 0.1.0
 appVersion: "0.16.5"
 home: https://github.com/falkordb/operator
 sources:
-  - https://github.com/falkordb/redis-operator
+  - https://github.com/falkordb/operator
 maintainers:
   - name: muhammadqadora
 keywords:

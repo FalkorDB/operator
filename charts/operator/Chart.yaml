@@ -6,9 +6,9 @@ description: Provides easy falkordb-operator setup definitions for Kubernetes se
 engine: gotpl
 maintainers:
   - name: muhammadqadora
-name: redis-operator
+name: operator
 sources:
-  - https://github.com/falkordb/redis-operator
+  - https://github.com/falkordb/operator
 home: https://github.com/falkordb/operator
 keywords:
 - operator

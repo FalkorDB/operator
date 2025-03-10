@@ -1,6 +1,6 @@
 ---
 remote: origin
-target-branch: gh-pages
+target-branch: main
 chart-dirs:
   - charts
 chart-repos:

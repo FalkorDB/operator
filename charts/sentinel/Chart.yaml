@@ -1,9 +1,9 @@
 apiVersion: v2
-name: redis-sentinel
+name: sentinel
 description: Provides easy redis setup definitions for Kubernetes services, and deployment.
 version: 0.1.0
 appVersion: "0.16.9"
-home: https://github.com/falkordb/redis-operator
+home: https://github.com/falkordb/operator
 sources:
   - https://github.com/falkordb/operator
 maintainers:
