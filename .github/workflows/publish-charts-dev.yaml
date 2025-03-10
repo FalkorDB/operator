@@ -1,14 +1,14 @@
-name: Release Charts dev
+name: Release Charts
 
 on:
   push:
     paths:
       - 'charts/**'
-      - '.github/workflows/publish-charts.yaml'
+      - '.github/workflows/publish-charts-dev.yaml'
     branches:
       - dev
-  workflow_dispatch:
 
+      
 jobs:
   lint-charts:
     runs-on: ubuntu-latest
