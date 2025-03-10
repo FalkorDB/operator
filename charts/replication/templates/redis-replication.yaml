@@ -15,6 +15,9 @@ spec:
   {{- if .Values.redisReplication.terminationGracePeriodSeconds }}
   terminationGracePeriodSeconds: {{ .Values.redisReplication.terminationGracePeriodSeconds }}
   {{- end }}
+  {{- if .Values.topologySpreadConstraints }}
+  topologySpreadConstraints: {{ toYaml .Values.topologySpreadConstraints | nindent 4 }}
+  {{- end }}
   clusterSize: {{ .Values.redisReplication.clusterSize }}  
   kubernetesConfig:
     image: "{{ .Values.redisReplication.image }}:{{ .Values.redisReplication.tag }}"

@@ -25,6 +25,10 @@ affinity:
 tolerations:
   {{- toYaml .tolerations | nindent 2 }}
 {{- end }}
+{{- if .topologySpreadConstraints }}
+topologySpreadConstraints:
+  {{- toYaml .topologySpreadConstraints | nindent 2 }}
+{{- end }}
 {{- if .pdb.enabled  }}
 pdb:
   enabled: {{ .pdb.enabled }}

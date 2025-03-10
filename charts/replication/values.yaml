@@ -60,8 +60,8 @@ serviceMonitor:
 
 redisExporter:
   enabled: false
-  image: quay.io/opstree/redis-exporter
-  tag: "v1.44.0"
+  image: falkordb/redis_exporter
+  tag: "v1.68.0-alpine"
   imagePullPolicy: IfNotPresent
   resources: {}
     # requests:
@@ -125,7 +125,13 @@ podSecurityContext:
   fsGroup: 1000
 
 securityContext: {}
-
+topologySpreadConstraints: []
+  # - maxSkew: 1
+  #   topologyKey: kubernetes.io/hostname
+  #   whenUnsatisfiable: DoNotSchedule
+  #   labelSelector:
+  #     matchLabels:
+  #       app: falkordb
 affinity: {}
   # nodeAffinity:
   #   requiredDuringSchedulingIgnoredDuringExecution:

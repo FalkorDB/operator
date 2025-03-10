@@ -28,6 +28,13 @@ redisCluster:
   leader:
     replicas: 3
     serviceType: ClusterIP
+    topologySpreadConstraints: []
+      # - maxSkew: 1
+      #   topologyKey: kubernetes.io/hostname
+      #   whenUnsatisfiable: DoNotSchedule
+      #   labelSelector:
+      #     matchLabels:
+      #       app: falkordb
     affinity: {}
       # nodeAffinity:
       #   requiredDuringSchedulingIgnoredDuringExecution:
@@ -52,6 +59,13 @@ redisCluster:
   follower:
     replicas: 3
     serviceType: ClusterIP
+    topologySpreadConstraints: []
+      # - maxSkew: 1
+      #   topologyKey: kubernetes.io/hostname
+      #   whenUnsatisfiable: DoNotSchedule
+      #   labelSelector:
+      #     matchLabels:
+      #       app: falkordb
     affinity: null
       # nodeAffinity:
       #   requiredDuringSchedulingIgnoredDuringExecution:
@@ -105,8 +119,8 @@ serviceMonitor:
 
 redisExporter:
   enabled: false
-  image: quay.io/opstree/redis-exporter
-  tag: "v1.44.0"
+  image: falkordb/redis_exporter
+  tag: "v1.68.0-alpine"
   imagePullPolicy: IfNotPresent
   resources: {}
     # requests:

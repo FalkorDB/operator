@@ -15,6 +15,9 @@ spec:
   {{- if .Values.redisSentinel.hostPort }}
   hostPort: {{ .Values.redisSentinel.hostPort }}
   {{- end }}
+  {{- if .Values.topologySpreadConstraints }}
+  topologySpreadConstraints: {{ toYaml .Values.redisSentinel.topologySpreadConstraints | nindent 4 }}
+  {{- end }}
   clusterSize: {{ .Values.redisSentinel.clusterSize }}
   # Sentinel Config
   redisSentinelConfig:

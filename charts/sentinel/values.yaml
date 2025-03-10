@@ -74,8 +74,8 @@ serviceMonitor:
 
 redisExporter:
   enabled: false
-  image: quay.io/opstree/redis-exporter
-  tag: "v1.44.0"
+  image: falkordb/redis_exporter
+  tag: "v1.68.0-alpine"
   imagePullPolicy: IfNotPresent
   resources: {}
     # requests:
