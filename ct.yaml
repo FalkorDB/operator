@@ -4,4 +4,4 @@ target-branch: main
 chart-dirs:
   - charts
 chart-repos:
-  - falkordb-helm=https://falkordb/helm-charts
+  - falkordb-helm=https://falkordb.github.io/helm-charts
