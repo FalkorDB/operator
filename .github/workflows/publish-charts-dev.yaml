@@ -7,7 +7,7 @@ on:
       - '.github/workflows/publish-charts.yaml'
     branches:
       - dev
-
+  workflow_dispatch:
 
 jobs:
   lint-charts:
