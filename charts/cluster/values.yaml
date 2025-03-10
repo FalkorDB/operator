@@ -8,6 +8,7 @@ redisCluster:
   tag: "latest"
   imagePullPolicy: IfNotPresent
   imagePullSecrets: {}
+  
   terminationGracePeriodSeconds: null
   hostPort: null
     # - name:  Secret with Registry credentials
