@@ -6,6 +6,8 @@ redisSentinel:
   tag: v7.0.15
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
+  hostPort: null
+  terminationGracePeriodSeconds: null
     # - name:  Secret with Registry credentials
   redisSecret:
     secretName: ""

@@ -1,9 +1,9 @@
 ---
 redisOperator:
-  name: redis-operator
-  imageName: ghcr.io/ot-container-kit/redis-operator/redis-operator
+  name: falkordb-operator
+  imageName: falkordb/operator
   # Overrides the image tag whose default is the chart appVersion.
-  imageTag: ""
+  imageTag: "latest"
   imagePullPolicy: Always
   imagePullSecrets: []
 
@@ -37,14 +37,14 @@ replicas: 1
 
 rbac:
   enabled: true
-serviceAccountName: redis-operator
+serviceAccountName: falkordb-operator
 
 serviceAccount:
   automountServiceAccountToken: true
 
 service:
   name: webhook-service
-  namespace: redis-operator
+  namespace: falkordb-operator
 
 certificate:
   name: serving-cert
@@ -52,8 +52,8 @@ certificate:
 
 issuer:
   type: selfSigned
-  name: redis-operator-issuer
-  email: shubham.gupta@opstree.com
+  name: falkordb-operator-issuer
+  email: muhammad.qadora@falkordb.com
   server: https://acme-v02.api.letsencrypt.org/directory
   privateKeySecretName: letsencrypt-prod
   solver:

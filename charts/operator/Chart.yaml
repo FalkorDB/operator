@@ -1,8 +1,8 @@
 ---
 apiVersion: v2
-version: 0.19.3
+version: 0.1.0
 appVersion: "0.19.1"
-description: Provides easy redis setup definitions for Kubernetes services, and deployment.
+description: Provides easy falkordb-operator setup definitions for Kubernetes services, and deployment.
 engine: gotpl
 maintainers:
   - name: muhammadqadora

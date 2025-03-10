@@ -9,6 +9,12 @@ metadata:
     redis.opstreelabs.in/recreate-statefulset: "true"
     {{ end }}
 spec:
+  {{- if .Values.redisReplication.hostPort }}
+  hostPort: {{ .Values.redisReplication.hostPort }}
+  {{- end }}
+  {{- if .Values.redisReplication.terminationGracePeriodSeconds }}
+  terminationGracePeriodSeconds: {{ .Values.redisReplication.terminationGracePeriodSeconds }}
+  {{- end }}
   clusterSize: {{ .Values.redisReplication.clusterSize }}  
   kubernetesConfig:
     image: "{{ .Values.redisReplication.image }}:{{ .Values.redisReplication.tag }}"

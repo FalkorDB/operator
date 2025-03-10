@@ -1,10 +1,12 @@
 ---
 redisStandalone:
   name: ""
-  image: quay.io/opstree/redis
-  tag: v7.0.15
+  image: falkordb/redis
+  tag: "latest"
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
+  hostPort: null
+  terminationGracePeriodSeconds: null
     # - name:  Secret with Registry credentials
   redisSecret:
     secretName: ""

@@ -2,10 +2,12 @@
 redisReplication:
   name: ""
   clusterSize: 3
-  image: quay.io/opstree/redis
-  tag: v7.0.15
+  image: falkordb/redis
+  tag: "latest"
   imagePullPolicy: IfNotPresent
   imagePullSecrets: []
+  terminationGracePeriodSeconds: null
+  hostPort: null
     # - name:  Secret with Registry credentials
   redisSecret:
     secretName: ""

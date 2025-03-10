@@ -1,16 +1,14 @@
-# redis
+# falkordb
 
-This Helm chart deploys the redis-operator into your Kubernetes cluster. The operator facilitates the deployment, scaling, and management of Redis clusters and other Redis resources provided by the OpsTree Solutions team.
+This Helm chart deploys the falkordb-operator into your Kubernetes cluster. The operator facilitates the deployment, scaling, and management of falkordb clusters and other falkordb resources provided by the FalkorDB Solutions team.
 
-**Homepage:** <https://github.com/ot-container-kit/redis-operator>
+**Homepage:** <https://github.com/falkordb/operator>
 
 ## Maintainers
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| iamabhishek-dubey |  |  |
-| sandy724 |  |  |
-| shubham-cmyk |  |  |
+| muhammadqadora |  |  |
 
 ## Pre-Requisities
 
@@ -20,14 +18,14 @@ This Helm chart deploys the redis-operator into your Kubernetes cluster. The ope
 
 ## Source Code
 
-* <https://github.com/ot-container-kit/redis-operator>
+* <https://github.com/falkordb/operator>
 
 ## Installation Steps
 
 ### 1. Add Helm Repository
 
 ```bash
-helm repo add ot-helm https://ot-container-kit.github.io/helm-charts
+helm repo add falkordb https://falkordb.github.io/helm-charts
 ```
 
 ### 2. Install Cert-Manager (Optional)
@@ -40,28 +38,28 @@ You can follow the [official cert-manager installation guide](https://cert-manag
 Replace `<YourCertSecretName>` and `<YourPrivateKey>` with your specific values.
 
 ```bash
-helm install <redis-operator> ot-helm/redis-operator --version=0.15.5 --appVersion=0.15.1 --set certificate.secretName=<YourCertSecretName> --set certmanager.enabled=true --set redisOperator.webhook=true --namespace <redis-operator> --create-namespace
+helm install <falkordb-operator> falkordb/falkordb-operator --version=0.15.5 --appVersion=0.15.1 --set certificate.secretName=<YourCertSecretName> --set certmanager.enabled=true --set redisOperator.webhook=true --namespace <falkordb-operator> --create-namespace
 ```
 
 > Note: If `certificate.secretName` is not provided, the operator will generate a self-signed certificate and use it for webhook server.
 ---
-> Note : If you want to disable the webhook you have to pass the `--set webhook=false` and `--set certmanager.enabled=false`  while installing the redis-operator.
+> Note : If you want to disable the webhook you have to pass the `--set webhook=false` and `--set certmanager.enabled=false`  while installing the falkordb-operator.
 
 ### 4. Patch the CA Bundle (if using cert-manager)
 
 Cert-manager injects the CA bundle into the webhook configuration.
 
 ```bash
-kubectl patch crd redis.redis.redis.opstreelabs.in -p '{"metadata":{"annotations":{"cert-manager.io/inject-ca-from":"<redis-operator>/<serving-cert>"}}}'
+kubectl patch crd redis.redis.redis.opstreelabs.in -p '{"metadata":{"annotations":{"cert-manager.io/inject-ca-from":"<falkordb-operator>/<serving-cert>"}}}'
 
-kubectl patch crd redisclusters.redis.redis.opstreelabs.in -p '{"metadata":{"annotations":{"cert-manager.io/inject-ca-from":"<redis-operator>/<serving-cert>"}}}'
+kubectl patch crd redisclusters.redis.redis.opstreelabs.in -p '{"metadata":{"annotations":{"cert-manager.io/inject-ca-from":"<falkordb-operator>/<serving-cert>"}}}'
 
-kubectl patch crd redisreplications.redis.redis.opstreelabs.in -p '{"metadata":{"annotations":{"cert-manager.io/inject-ca-from":"<redis-operator>/<serving-cert>"}}}'
+kubectl patch crd redisreplications.redis.redis.opstreelabs.in -p '{"metadata":{"annotations":{"cert-manager.io/inject-ca-from":"<falkordb-operator>/<serving-cert>"}}}'
 
-kubectl patch crd redissentinels.redis.redis.opstreelabs.in -p '{"metadata":{"annotations":{"cert-manager.io/inject-ca-from":"<redis-operator>/<serving-cert>"}}}'
+kubectl patch crd redissentinels.redis.redis.opstreelabs.in -p '{"metadata":{"annotations":{"cert-manager.io/inject-ca-from":"<falkordb-operator>/<serving-cert>"}}}'
 ```
 
-> Note: Replace `<redis-operator>` and `<serving-cert>` with your specific values i.e. release name and certificate name.
+> Note: Replace `<falkordb-operator>` and `<serving-cert>` with your specific values i.e. release name and certificate name.
 
 #### You can verify the patch by running the following commands
 
@@ -90,8 +88,8 @@ kubectl create secret tls <webhook-server-cert> --key tls.key --cert tls.crt -n 
 | certificate.secretName | string | `"webhook-server-cert"` |  |
 | certmanager.apiVersion | string | `"cert-manager.io/v1"` |  |
 | certmanager.enabled | bool | `false` |  |
-| issuer.email | string | `"shubham.gupta@opstree.com"` |  |
-| issuer.name | string | `"redis-operator-issuer"` |  |
+| issuer.email | string | `"muhammad.qadora@falkordb.com"` |  |
+| issuer.name | string | `"falkordb-operator-issuer"` |  |
 | issuer.privateKeySecretName | string | `"letsencrypt-prod"` |  |
 | issuer.server | string | `"https://acme-v02.api.letsencrypt.org/directory"` |  |
 | issuer.solver.enabled | bool | `true` |  |
@@ -104,11 +102,11 @@ kubectl create secret tls <webhook-server-cert> --key tls.key --cert tls.crt -n 
 | redisOperator.automountServiceAccountToken | bool | `true` |  |
 | redisOperator.env | list | `[]` |  |
 | redisOperator.extraArgs | list | `[]` |  |
-| redisOperator.imageName | string | `"ghcr.io/ot-container-kit/redis-operator/redis-operator"` |  |
+| redisOperator.imageName | string | `"falkordb/operator"` |  |
 | redisOperator.imagePullPolicy | string | `"Always"` |  |
 | redisOperator.imagePullSecrets | list | `[]` |  |
 | redisOperator.imageTag | string | `""` |  |
-| redisOperator.name | string | `"redis-operator"` |  |
+| redisOperator.name | string | `"falkordb-operator"` |  |
 | redisOperator.podAnnotations | object | `{}` |  |
 | redisOperator.podLabels | object | `{}` |  |
 | redisOperator.watchNamespace | string | `""` |  |
@@ -120,8 +118,8 @@ kubectl create secret tls <webhook-server-cert> --key tls.key --cert tls.crt -n 
 | resources.requests.memory | string | `"500Mi"` |  |
 | securityContext | object | `{}` |  |
 | service.name | string | `"webhook-service"` |  |
-| service.namespace | string | `"redis-operator"` |  |
+| service.namespace | string | `"falkordb-operator"` |  |
 | serviceAccount.automountServiceAccountToken | bool | `true` |  |
-| serviceAccountName | string | `"redis-operator"` |  |
+| serviceAccountName | string | `"falkordb-operator"` |  |
 | tolerateAllTaints | bool | `false` |  |
 | tolerations | list | `[]` |  |
