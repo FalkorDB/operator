@@ -9,7 +9,7 @@ metadata:
     redis.opstreelabs.in/recreate-statefulset: "true"
     {{ end }}
 spec:
-  {{-if .Values.redisCluster.terminationGracePeriodSeconds }}
+  {{- if .Values.redisCluster.terminationGracePeriodSeconds }}
   terminationGracePeriodSeconds: {{ .Values.redisCluster.terminationGracePeriodSeconds }}
   {{- end }}
   {{- if .Values.redisCluster.hostPort }}
