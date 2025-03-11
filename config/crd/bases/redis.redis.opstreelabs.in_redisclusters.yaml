@@ -331,8 +331,6 @@ spec:
                 type: array
               hostNetwork:
                 type: boolean
-              hostPort:
-                type: integer
               initContainer:
                 description: InitContainer for each Redis pods
                 properties:

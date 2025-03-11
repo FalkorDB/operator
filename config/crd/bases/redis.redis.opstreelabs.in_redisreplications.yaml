@@ -1190,8 +1190,6 @@ spec:
                   - name
                   type: object
                 type: array
-              hostPort:
-                type: integer
               initContainer:
                 description: InitContainer for each Redis pods
                 properties:
