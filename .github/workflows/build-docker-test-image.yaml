@@ -1,7 +1,5 @@
 name: Build Docker Image for Operator testing
 on:
-  pull_request:
-    types: [opened, synchronize, ready_for_review]
   push:
     branches:
       - dev
