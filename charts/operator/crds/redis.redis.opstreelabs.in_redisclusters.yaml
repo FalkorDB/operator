@@ -67,6 +67,10 @@ spec:
           spec:
             description: RedisClusterSpec defines the desired state of RedisCluster
             properties:
+              terminationGracePeriodSeconds:
+                type: integer
+              hostPort:
+                type: integer
               TLS:
                 description: TLS Configuration for redis instances
                 properties:
