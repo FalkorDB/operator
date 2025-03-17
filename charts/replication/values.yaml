@@ -61,7 +61,7 @@ serviceMonitor:
 redisExporter:
   enabled: false
   image: falkordb/redis_exporter
-  tag: "v1.68.0-alpine"
+  tag: "v1.68.0"
   imagePullPolicy: IfNotPresent
   resources: {}
     # requests:
