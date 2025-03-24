@@ -452,11 +452,24 @@ func generateContainerDef(name string, containerParams containerParameters, clus
 	}
 
 	if containerParams.HostPort != nil {
-		containerDefinition[0].Ports = []corev1.ContainerPort{
-			{
-				HostPort:      int32(*containerParams.HostPort),
-				ContainerPort: int32(*containerParams.Port),
-			},
+		if clusterMode {
+			containerDefinition[0].Ports = []corev1.ContainerPort{
+				{
+					HostPort:      int32(*containerParams.HostPort),
+					ContainerPort: int32(*containerParams.Port),
+				},
+				{
+					HostPort:      int32(*containerParams.HostPort + 10000),
+					ContainerPort: int32(*containerParams.Port + 10000),
+				},
+			}
+		} else {
+			containerDefinition[0].Ports = []corev1.ContainerPort{
+				{
+					HostPort:      int32(*containerParams.HostPort),
+					ContainerPort: int32(*containerParams.Port),
+				},
+			}
 		}
 	}
 
