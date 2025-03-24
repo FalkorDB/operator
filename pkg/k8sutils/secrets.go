@@ -38,7 +38,7 @@ func getRedisTLSConfig(ctx context.Context, client kubernetes.Interface, namespa
 
 	tlsClientCert, certExists := secret.Data["tls.crt"]
 	tlsClientKey, keyExists := secret.Data["tls.key"]
-	tlsCaCertificate, caExists := secret.Data["tls.crt"]
+	tlsCaCertificate, caExists := secret.Data["ca.crt"]
 
 	if !certExists || !keyExists || !caExists {
 		logf.FromContext(ctx).Error(errors.New("required TLS keys are missing in the secret"), "Missing TLS keys in the secret")
@@ -59,11 +59,10 @@ func getRedisTLSConfig(ctx context.Context, client kubernetes.Interface, namespa
 	}
 
 	return &tls.Config{
-		Certificates:       []tls.Certificate{cert},
-		ServerName:         podName + "." + namespace,
-		RootCAs:            tlsCaCertificates,
-		MinVersion:         tls.VersionTLS12,
-		ClientAuth:         tls.NoClientCert,
-		InsecureSkipVerify: true,
+		Certificates: []tls.Certificate{cert},
+		ServerName:   podName + "." + namespace,
+		RootCAs:      tlsCaCertificates,
+		MinVersion:   tls.VersionTLS12,
+		ClientAuth:   tls.NoClientCert,
 	}
 }
