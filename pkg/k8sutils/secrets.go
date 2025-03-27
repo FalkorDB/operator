@@ -39,8 +39,25 @@ func getRedisTLSConfig(ctx context.Context, client kubernetes.Interface, namespa
 	tlsClientCert, certExists := secret.Data["tls.crt"]
 	tlsClientKey, keyExists := secret.Data["tls.key"]
 	tlsCaCertificate, caExists := secret.Data["ca.crt"]
+	logf.FromContext(ctx).Info("Secret data keys", "keys", secret.Data)
+	logf.FromContext(ctx).Info("TLS cert exists", "exists", certExists)
+	logf.FromContext(ctx).Info("TLS key exists", "exists", keyExists)
 
-	if !certExists || !keyExists || !caExists {
+	if !caExists {
+		logf.FromContext(ctx).Info("YESSSSSSSS DID NOT FIND CA CERTIFICATE")
+		caSecret, err := client.CoreV1().Secrets(namespace).Get(context.TODO(), "ca-cert", metav1.GetOptions{})
+		if err != nil {
+			logf.FromContext(ctx).Error(err, "Failed in getting CA secret", "secretName", "ca-cert", "namespace", namespace)
+			return nil
+		}
+		tlsCaCertificate, caExists = caSecret.Data["ca.crt"]
+		if !caExists {
+			logf.FromContext(ctx).Error(errors.New("CA certificate not found in the fallback secret"), "Missing CA certificate in the fallback secret", "secretName", "ca-cert", "namespace", namespace)
+			return nil
+		}
+	}
+
+	if !certExists || !keyExists {
 		logf.FromContext(ctx).Error(errors.New("required TLS keys are missing in the secret"), "Missing TLS keys in the secret")
 		return nil
 	}
