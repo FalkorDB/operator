@@ -597,8 +597,6 @@ func GetRedisNodesByRole(ctx context.Context, cl kubernetes.Interface, cr *redis
 // Check the Redis Server Role i.e. master, slave and sentinel
 func checkRedisServerRole(ctx context.Context, redisClient *redis.Client, podName string) string {
 	info, err := redisClient.Info(ctx, "Replication").Result()
-	println("YOOOOOOOOOO THE INFO IS: ", info)
-	log.FromContext(ctx).Error(err, "YOOOOOOOOO THIS IS THE ERROR")
 	if err != nil {
 		log.FromContext(ctx).Error(err, "Failed to Get the role Info of the", "redis pod", podName)
 		return ""
@@ -618,7 +616,6 @@ func checkRedisServerRole(ctx context.Context, redisClient *redis.Client, podNam
 // checkAttachedSlave would return redis pod name which has slave
 func checkAttachedSlave(ctx context.Context, redisClient *redis.Client, podName string) int {
 	info, err := redisClient.Info(ctx, "Replication").Result()
-	println("YOOOOOOOOOO THE INFO in check attached slaves IS: ", info)
 	if err != nil {
 		log.FromContext(ctx).Error(err, "Failed to get the connected slaves count of the", "redis pod", podName)
 		return -1 // return -1 if failed to get the connected slaves count
