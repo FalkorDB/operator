@@ -185,7 +185,11 @@ func getRedisTLSArgs(tlsConfig *redisv1beta2.TLSConfig, clientHost string) []str
 	if tlsConfig != nil {
 		cmd = append(cmd, "--tls")
 		cmd = append(cmd, "--cacert")
-		cmd = append(cmd, "/tls/ca.crt")
+		if !strings.HasPrefix(tlsConfig.CaKeyFile, "/") {
+			cmd = append(cmd, "/tls/"+tlsConfig.CaKeyFile)
+		} else {
+			cmd = append(cmd, tlsConfig.CaKeyFile)
+		}
 		cmd = append(cmd, "-h")
 		cmd = append(cmd, clientHost)
 	}
