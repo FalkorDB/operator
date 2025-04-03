@@ -183,13 +183,15 @@ func ExecuteRedisClusterCommand(ctx context.Context, client kubernetes.Interface
 func getRedisTLSArgs(tlsConfig *redisv1beta2.TLSConfig, clientHost string) []string {
 	cmd := []string{}
 	if tlsConfig != nil {
+		var path string
+		if tlsConfig.CaKeyFile == "ca.crt" {
+			path = "/tls/ca.crt"
+		} else {
+			path = tlsConfig.CaKeyFile
+		}
 		cmd = append(cmd, "--tls")
 		cmd = append(cmd, "--cacert")
-		if !strings.HasPrefix(tlsConfig.CaKeyFile, "/") {
-			cmd = append(cmd, "/tls/"+tlsConfig.CaKeyFile)
-		} else {
-			cmd = append(cmd, tlsConfig.CaKeyFile)
-		}
+		cmd = append(cmd, path)
 		cmd = append(cmd, "-h")
 		cmd = append(cmd, clientHost)
 	}
