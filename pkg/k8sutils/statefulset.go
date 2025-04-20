@@ -740,7 +740,6 @@ func getVolumeMount(name string, persistenceEnabled *bool, clusterMode bool, nod
 			Name:      "acl-secret",
 			MountPath: "/etc/redis/user.acl",
 			SubPath:   "user.acl",
-			ReadOnly:  false,
 		})
 	}
 
