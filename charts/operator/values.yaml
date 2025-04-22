@@ -1,7 +1,7 @@
 ---
 redisOperator:
   name: falkordb-operator
-  imageName: muhammadqadora/operator-test
+  imageName: falkordb/operator
   # Overrides the image tag whose default is the chart appVersion.
   imageTag: "latest"
   imagePullPolicy: Always

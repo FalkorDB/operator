@@ -182,20 +182,22 @@ func ExecuteRedisClusterCommand(ctx context.Context, client kubernetes.Interface
 
 func getRedisTLSArgs(tlsConfig *redisv1beta2.TLSConfig, clientHost string) []string {
 	cmd := []string{}
-	if tlsConfig != nil && tlsConfig.Enabled {
-		var path string
-		if strings.HasPrefix(tlsConfig.CaKeyFile, "/") {
-			path = tlsConfig.CaKeyFile
-		} else if tlsConfig.CaKeyFile != "ca.crt" {
-			path = "/tls/" + tlsConfig.CaKeyFile
-		} else {
-			path = "/tls/ca.crt"
+	if tlsConfig != nil {
+		if tlsConfig.Enabled {
+			var path string
+			if strings.HasPrefix(tlsConfig.CaKeyFile, "/") {
+				path = tlsConfig.CaKeyFile
+			} else if tlsConfig.CaKeyFile != "ca.crt" {
+				path = "/tls/" + tlsConfig.CaKeyFile
+			} else {
+				path = "/tls/ca.crt"
+			}
+			cmd = append(cmd, "--tls")
+			cmd = append(cmd, "--cacert")
+			cmd = append(cmd, path)
+			cmd = append(cmd, "-h")
+			cmd = append(cmd, clientHost)
 		}
-		cmd = append(cmd, "--tls")
-		cmd = append(cmd, "--cacert")
-		cmd = append(cmd, path)
-		cmd = append(cmd, "-h")
-		cmd = append(cmd, clientHost)
 	}
 	return cmd
 }
@@ -458,6 +460,7 @@ func configureRedisClient(ctx context.Context, client kubernetes.Interface, cr *
 		Password: pass,
 		DB:       0,
 	}
+
 	if cr.Spec.TLS != nil && cr.Spec.TLS.Enabled {
 		opts.TLSConfig = getRedisTLSConfig(ctx, client, cr.Namespace, cr.Spec.TLS.Secret.SecretName, redisInfo.PodName)
 	}
@@ -573,7 +576,7 @@ func configureRedisReplicationClient(ctx context.Context, client kubernetes.Inte
 		Password: pass,
 		DB:       0,
 	}
-	if cr.Spec.TLS != nil {
+	if cr.Spec.TLS != nil && cr.Spec.TLS.Enabled {
 		opts.TLSConfig = getRedisTLSConfig(ctx, client, cr.Namespace, cr.Spec.TLS.Secret.SecretName, podName)
 	}
 	return redis.NewClient(opts)
