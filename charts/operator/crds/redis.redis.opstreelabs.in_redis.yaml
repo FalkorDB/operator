@@ -44,6 +44,10 @@ spec:
               TLS:
                 description: TLS Configuration for redis instances
                 properties:
+                  enabled:
+                    description: Enable TLS for redis instances
+                    type: boolean
+                    default: false
                   ca:
                     type: string
                   cert:
