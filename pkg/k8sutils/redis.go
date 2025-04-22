@@ -182,7 +182,7 @@ func ExecuteRedisClusterCommand(ctx context.Context, client kubernetes.Interface
 
 func getRedisTLSArgs(tlsConfig *redisv1beta2.TLSConfig, clientHost string) []string {
 	cmd := []string{}
-	if tlsConfig != nil {
+	if tlsConfig != nil && tlsConfig.Enabled {
 		var path string
 		if strings.HasPrefix(tlsConfig.CaKeyFile, "/") {
 			path = tlsConfig.CaKeyFile
@@ -458,7 +458,7 @@ func configureRedisClient(ctx context.Context, client kubernetes.Interface, cr *
 		Password: pass,
 		DB:       0,
 	}
-	if cr.Spec.TLS != nil {
+	if cr.Spec.TLS != nil && cr.Spec.TLS.Enabled {
 		opts.TLSConfig = getRedisTLSConfig(ctx, client, cr.Namespace, cr.Spec.TLS.Secret.SecretName, redisInfo.PodName)
 	}
 	return redis.NewClient(opts)

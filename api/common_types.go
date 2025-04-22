@@ -123,6 +123,7 @@ type AdditionalVolume struct {
 // TLS Configuration for redis instances
 // +k8s:deepcopy-gen=true
 type TLSConfig struct {
+	Enabled     bool   `json:"enabled,omitempty"`
 	CaKeyFile   string `json:"ca,omitempty"`
 	CertKeyFile string `json:"cert,omitempty"`
 	KeyFile     string `json:"key,omitempty"`
