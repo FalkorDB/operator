@@ -163,6 +163,11 @@ func generateRedisSentinelContainerParams(ctx context.Context, client kubernetes
 		HostPort:              cr.Spec.HostPort,
 		AdditionalEnvVariable: getSentinelEnvVariable(ctx, client, cr, dcl),
 	}
+
+	if cr.Spec.Storage != nil {
+		containerProp.AdditionalVolume = cr.Spec.Storage.VolumeMount.Volume
+		containerProp.AdditionalMountPath = cr.Spec.Storage.VolumeMount.MountPath
+	}
 	if cr.Spec.EnvVars != nil {
 		containerProp.EnvVars = cr.Spec.EnvVars
 	}

@@ -191,6 +191,7 @@ podSecurityContext:
 # serviceAccountName: redis-sa
 
 TLS:
+  enabled: false
   ca: ca.key
   cert: tls.crt
   key: tls.key

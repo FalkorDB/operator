@@ -73,8 +73,9 @@ spec:
   {{- if .Values.podSecurityContext }}
   podSecurityContext: {{ toYaml .Values.podSecurityContext | nindent 4 }}
   {{- end }}
-  {{- if and .Values.TLS.ca .Values.TLS.cert .Values.TLS.key .Values.TLS.secret.secretName }}
+  {{- if and .Values.TLS.ca .Values.TLS.cert .Values.TLS.key .Values.TLS.secret.secretName .Values.TLS.enabled}}
   TLS:
+    enabled: {{ .Values.TLS.enabled }}
     ca: {{ .Values.TLS.ca | quote }}
     cert: {{ .Values.TLS.cert | quote }}
     key: {{ .Values.TLS.key | quote }}
