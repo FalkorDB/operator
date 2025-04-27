@@ -11,6 +11,7 @@ metadata:
     # for better high availability
     # PS: you should enable operator webhook for this to work
     redisclusters.redis.redis.opstreelabs.in/role-anti-affinity: "true"
+    redisclusters.redis.redis.opstreelabs.in/role-anti-affinity-topology-key: "kubernetes.io/hostname"
 spec:
   clusterSize: 3
   clusterVersion: v7

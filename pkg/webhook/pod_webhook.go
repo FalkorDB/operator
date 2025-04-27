@@ -54,6 +54,7 @@ const (
 )
 
 const annotationKeyEnablePodAntiAffinity = "redisclusters.redis.redis.opstreelabs.in/role-anti-affinity"
+const annotationKeyEnablePodAntiAffinityTopologyKey = "redisclusters.redis.redis.opstreelabs.in/role-anti-affinity-topology-key"
 
 func (v *PodAntiAffiniytMutate) Handle(ctx context.Context, req admission.Request) admission.Response {
 	logger := v.logger.WithValues("Request.Namespace", req.Namespace, "Request.Name", req.Name)
@@ -80,7 +81,12 @@ func (v *PodAntiAffiniytMutate) Handle(ctx context.Context, req admission.Reques
 
 	old := pod.DeepCopy()
 
-	v.AddPodAntiAffinity(pod)
+	topologyKey := annotations[annotationKeyEnablePodAntiAffinityTopologyKey]
+	if topologyKey == "" {
+		topologyKey = "kubernetes.io/hostname"
+	}
+
+	v.AddPodAntiAffinity(pod, topologyKey)
 	if !reflect.DeepEqual(old, pod) {
 		marshaledPod, err := json.Marshal(pod)
 		if err != nil {
@@ -108,7 +114,7 @@ func (m *PodAntiAffiniytMutate) InjectLogger(l logr.Logger) error {
 	return nil
 }
 
-func (v *PodAntiAffiniytMutate) AddPodAntiAffinity(pod *corev1.Pod) {
+func (v *PodAntiAffiniytMutate) AddPodAntiAffinity(pod *corev1.Pod, topologyKey string) {
 	podName := pod.ObjectMeta.Name
 	antiLabelValue := v.getAntiAffinityValue(podName)
 
@@ -131,7 +137,7 @@ func (v *PodAntiAffiniytMutate) AddPodAntiAffinity(pod *corev1.Pod) {
 				},
 			},
 		},
-		TopologyKey: "kubernetes.io/hostname",
+		TopologyKey: topologyKey,
 	}
 
 	pod.Spec.Affinity.PodAntiAffinity.RequiredDuringSchedulingIgnoredDuringExecution = append(pod.Spec.Affinity.PodAntiAffinity.RequiredDuringSchedulingIgnoredDuringExecution, addAntiAffinity)
