@@ -243,9 +243,14 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 	if k8sutils.CheckRedisNodeCount(ctx, r.K8sClient, instance, "") == totalReplicas {
 		k8sutils.CheckIfEmptyMasters(ctx, r.K8sClient, instance)
 	}
-
+	logger.Info("Replica counts match",
+		"readyLeaders", instance.Status.ReadyLeaderReplicas,
+		"readyFollowers", instance.Status.ReadyFollowerReplicas)
 	// Mark the cluster status as ready if all the leader and follower nodes are ready
 	if instance.Status.ReadyLeaderReplicas == leaderReplicas && instance.Status.ReadyFollowerReplicas == followerReplicas {
+		logger.Info("Replica counts match",
+			"readyLeaders", instance.Status.ReadyLeaderReplicas,
+			"readyFollowers", instance.Status.ReadyFollowerReplicas)
 		if k8sutils.RedisClusterStatusHealth(ctx, r.K8sClient, instance) {
 			// Apply dynamic config to all Redis instances in the cluster
 			if err = k8sutils.SetRedisClusterDynamicConfig(ctx, r.K8sClient, instance); err != nil {
