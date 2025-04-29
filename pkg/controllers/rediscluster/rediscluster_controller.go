@@ -243,9 +243,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 	if k8sutils.CheckRedisNodeCount(ctx, r.K8sClient, instance, "") == totalReplicas {
 		k8sutils.CheckIfEmptyMasters(ctx, r.K8sClient, instance)
 	}
-	logger.Info("Replica counts match",
-		"readyLeaders", instance.Status.ReadyLeaderReplicas,
-		"readyFollowers", instance.Status.ReadyFollowerReplicas)
+
 	// Mark the cluster status as ready if all the leader and follower nodes are ready
 	if instance.Status.ReadyLeaderReplicas == leaderReplicas && instance.Status.ReadyFollowerReplicas == followerReplicas {
 		logger.Info("Replica counts match",
@@ -253,6 +251,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 			"readyFollowers", instance.Status.ReadyFollowerReplicas)
 		if k8sutils.RedisClusterStatusHealth(ctx, r.K8sClient, instance) {
 			// Apply dynamic config to all Redis instances in the cluster
+			logger.Info("Redis cluster is ready, applying dynamic config")
 			if err = k8sutils.SetRedisClusterDynamicConfig(ctx, r.K8sClient, instance); err != nil {
 				logger.Error(err, "Failed to set dynamic config")
 				return intctrlutil.RequeueWithError(ctx, err, "failed to set dynamic config")
@@ -260,6 +259,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 
 			err = k8sutils.UpdateRedisClusterStatus(ctx, instance, status.RedisClusterReady, status.ReadyClusterReason, leaderReplicas, followerReplicas, r.Dk8sClient)
 			if err != nil {
+				logger.Error(err, "Failed to update redis cluster status")
 				return intctrlutil.RequeueWithError(ctx, err, "")
 			}
 		}
