@@ -1,5 +1,5 @@
-# Build the manager binary
-FROM golang:1.23-alpine AS builder
+# Build the manager or agent binary
+FROM golang:1.23-alpine3.21 AS builder
 ARG BUILDOS
 ARG BUILDPLATFORM
 ARG BUILDARCH
@@ -18,7 +18,7 @@ COPY go.sum go.sum
 RUN go mod download
 
 # Copy the go source
-COPY cmd/manager/main.go main.go
+COPY cmd/ cmd/
 COPY api/ api/
 COPY pkg/ pkg/
 COPY mocks/ mocks/
@@ -29,14 +29,16 @@ ENV GOOS=$TARGETOS
 ENV GOARCH=$TARGETARCH
 ENV CGO_ENABLED=0
 
-RUN GO111MODULE=on go build  -ldflags "${LDFLAGS}" -a -o manager main.go
+# Build the unified binary
+RUN GO111MODULE=on go build -ldflags "${LDFLAGS}" -a -o operator cmd/manager/main.go
 
-# Use distroless as minimal base image to package the manager binary
+# Use distroless as minimal base image to package the binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
 FROM gcr.io/distroless/static:nonroot
 LABEL maintainer="The Opstree Opensource <opensource@opstree.com>"
 WORKDIR /
-COPY --from=builder /workspace/manager .
+
+COPY --from=builder /workspace/operator /operator
 USER 65532:65532
 
-ENTRYPOINT ["/manager"]
+ENTRYPOINT ["/operator", "manager"] 
