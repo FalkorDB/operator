@@ -310,6 +310,19 @@ func (r *Reconciler) updateCurrentReplicaCount(ctx context.Context, instance *re
 
 	if currentLeaderReplicas != instance.Status.ReadyLeaderReplicas ||
 		currentFollowerReplicas != instance.Status.ReadyFollowerReplicas {
+		// Update status to Bootstrap if the cluster is in the process of bootstrapping
+		if instance.Status.ReadyLeaderReplicas == 0 && instance.Status.ReadyFollowerReplicas == 0 {
+			return k8sutils.UpdateRedisClusterStatus(
+				ctx,
+				instance,
+				status.RedisClusterBootstrap,
+				status.BootstrapClusterReason,
+				currentLeaderReplicas,
+				currentFollowerReplicas,
+				r.Dk8sClient,
+			)
+		}
+		// Otherwise, update status to Initializing
 		return k8sutils.UpdateRedisClusterStatus(
 			ctx,
 			instance,
