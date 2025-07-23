@@ -363,7 +363,7 @@ func CheckRedisNodeCount(ctx context.Context, client kubernetes.Interface, cr *r
 	if err != nil {
 		log.FromContext(ctx).Error(err, "failed to get cluster nodes")
 	}
-	count := len(clusterNodes)
+	var count int
 
 	switch nodeType {
 	case "leader":
@@ -373,10 +373,25 @@ func CheckRedisNodeCount(ctx context.Context, client kubernetes.Interface, cr *r
 	default:
 		redisNodeType = nodeType
 	}
+
+	if nodeType == "" {
+		count = 0
+		for _, node := range clusterNodes {
+			if nodeIsOfType(node, "master") && !nodeIsFailed(node) {
+				count++
+			}
+		}
+		for _, node := range clusterNodes {
+			if nodeIsOfType(node, "slave") && !nodeIsFailed(node) {
+				count++
+			}
+		}
+	}
+
 	if nodeType != "" {
 		count = 0
 		for _, node := range clusterNodes {
-			if nodeIsOfType(node, redisNodeType) {
+			if nodeIsOfType(node, redisNodeType) && !nodeIsFailed(node) {
 				count++
 			}
 		}
@@ -385,6 +400,16 @@ func CheckRedisNodeCount(ctx context.Context, client kubernetes.Interface, cr *r
 		log.FromContext(ctx).V(1).Info("Total number of redis nodes are", "Nodes", strconv.Itoa(count))
 	}
 	return int32(count)
+}
+
+func nodeIsFailed(node clusterNodesResponse) bool {
+	flags := strings.Split(node[2], ",")
+	for _, flag := range flags {
+		if flag == "fail" || flag == "fail?" || flag == "noaddr" || flag == "handshake" {
+			return true
+		}
+	}
+	return false
 }
 
 // RedisClusterStatusHealth use `redis-cli --cluster check 127.0.0.1:6379`
