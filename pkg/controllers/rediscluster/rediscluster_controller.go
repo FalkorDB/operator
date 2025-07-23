@@ -108,7 +108,7 @@ func (r *Reconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Resu
 			// Step 3 Rebalance the cluster
 			k8sutils.RebalanceRedisCluster(ctx, r.K8sClient, instance)
 			logger.Info("Redis cluster is downscaled... Rebalancing the cluster is done")
-			return intctrlutil.RequeueAfter(ctx, time.Second*10, "")
+			//return intctrlutil.RequeueAfter(ctx, time.Second*10, "")
 		} else {
 			logger.Info("masterCount is not equal to leader statefulset replicas,skip downscale", "masterCount", masterCount, "leaderReplicas", leaderReplicas)
 		}
